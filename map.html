@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mapid { position: absolute;top: 40;bottom: 0;left: 0;left: 0; right: 0; }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="contextmenu.js"></script>
+    
+</head>
+<body>
+    <button id="polygon">Add Polygon</button>
+    <button id="marker">Add Marker</button>
+    <button id="circle">Add Circle</button>
+    <button id="saveToJSON">Save into json</button>
+    <input type="file" id="selectFiles" value="Import" />
+    <button id="importFromJSON">import from json</button>
+    <a id="downloadAnchorElem" style="display:none"></a>
+    <div id="mapid"></div>
+    <script src="session.js"></script>
+    <script src="polygon.js"></script>
+    <script src="marker.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
