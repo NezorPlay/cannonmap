@@ -22,8 +22,6 @@ var polygonArray = [];
 var session = new Session(map);
 
 
-
-
 //static elements
 var marker = L.marker([413.71875,424.65625],{icon: Marker.getIconByType("cannon")}).addTo(map);
 var polygon = L.polygon([
@@ -98,6 +96,8 @@ document.getElementById("mapid").addEventListener("click", function (event) {
                 let name = prompt("Please enter the Name of the Marker", "maker" + Math.random());
                 let icon = prompt("What type of icon (fort/cannon)", "fort");
                 mark.name = name;
+                mark.icon = icon;
+                console.log(lat + "/" + lng);
                 mark.draw();
                 session.addMarker(mark);
                 currentadd = "";
@@ -155,7 +155,7 @@ document.getElementById("importFromJSON").addEventListener("click", function() {
             for(let i = 0; i < jsonFile.length; i++) {
                 if(jsonFile[i].type == "marker") {
                     let mark = new Marker(jsonFile[i].coords,map);
-                    letname = jsonFile[i].name;
+                    let name = jsonFile[i].name;
                     mark.icon = jsonFile[i].icon;
                     mark.name = name;
                     mark.draw();
@@ -166,6 +166,14 @@ document.getElementById("importFromJSON").addEventListener("click", function() {
                     poly.color = jsonFile[i].color;
                     poly.draw();
                     session.addPolygon(poly);
+                } else if(jsonFile[i].type == "polyline") {
+                    let marker1 = new Marker(jsonFile[i].marker1, map);
+                    let marker2 = new Marker(jsonFile[i].marker2, map);
+
+                    var polyline = new Polyline(marker1,marker2,map);
+                    polyline.name = jsonFile[i].name;
+                    polyline.draw();
+                    session.addPolyline(polyline);
                 }
             }
         }
@@ -184,8 +192,10 @@ document.getElementById("saveToJSON").addEventListener("click", function() {
         let tmpLat = session.marker[i].coords[0];
         let tmpLng = session.marker[i].coords[1];
         let name = session.marker[i].name;
+        let icon = session.marker[i].icon;
         mapArray.push({
             name: name,
+            icon: icon,
             type: "marker",
             coords: [tmpLat,tmpLng]
         })
@@ -207,6 +217,17 @@ document.getElementById("saveToJSON").addEventListener("click", function() {
         })
     }
 
+    for(let i = 0; i < session.polylines.length; i++) {
+        let marker1 = session.polylines[i].marker1.coords;
+        let marker2 = session.polylines[i].marker2.coords;
+        let name = session.polylines[i].name;
+        mapArray.push({
+            name: name,
+            type: "polyline",
+            marker1: marker1,
+            marker2: marker2
+        })
+    }
 
     let test = "";
     test = JSON.stringify(mapArray);
@@ -219,13 +240,33 @@ document.getElementById("saveToJSON").addEventListener("click", function() {
     dlAnchorElem.click();
 }); 
 
+document.getElementById("connectFortCannon").addEventListener("click", function() {
+    let marker1 = prompt("Please the name of the Fort", "");
+    let marker2 = prompt("Please the name of the Cannon", "");
+    let power = prompt("Please the Power", "");
+    connectMarkersWithLine(marker1, marker2, power);
+});
 
+function getMarkerByName(markerName) {
+    for(let marker of session.marker){
+        if(marker.name == markerName) {
+            console.log(marker)
+            return marker;
+        }
+    }     
+}
 
-function connectMarkersWithLine(marker1, marker2) {
-    var connectMarkerArray = [];
-    connectMarkerArray.push([marker1.lat,marker1.lng]);
-    connectMarkerArray.push([marker2.lat,marker2.lng]);
-    drawPolygon(connectMarkerArray);
+function connectMarkersWithLine(parmarker1, parmarker2, text) {
+    let marker1 = getMarkerByName(parmarker1);
+    let marker2 = getMarkerByName(parmarker2);
+    if(marker1 == undefined || marker2 == undefined) {
+        prompt("Failed to find a Marker");
+        return;
+    }
+    var polyline = new Polyline(marker1, marker2, map);
+    polyline.name = text;
+    session.addPolyline(polyline);
+    polyline.draw();
 }
 
 function drawCircle(lat,lng,parRadius) {

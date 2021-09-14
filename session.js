@@ -15,6 +15,14 @@ class Session{
         return this.varmarker;
     }
     
+    set polylines(polylines) {
+        this.varpolylines = polylines;
+    }
+
+    get polylines() {
+        return this.varpolylines;
+    }
+
     set map(map) {
         this.varmap = map;
     }
@@ -26,6 +34,7 @@ class Session{
     constructor(map) {
         this.polygons = [];
         this.marker = [];
+        this.polylines = [];
 
         this.varmap = map;
     }
@@ -36,5 +45,9 @@ class Session{
     
     addMarker(marker) {
         this.varmarker.push(marker);
+    }
+
+    addPolyline(polyline) {
+        this.varpolylines.push(polyline);
     }
 }
