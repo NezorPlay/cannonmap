@@ -15,23 +15,12 @@ L.tileLayer(tile_url, {
     maxZoom: 5
 }).addTo(map);
 
-var lat, lng;1
+var lat, lng;
 var currentadd = "";
 var polygonArray = [];
 
 var session = new Session(map);
 
-
-//static elements
-var marker = L.marker([413.71875,424.65625],{icon: Marker.getIconByType("cannon")}).addTo(map);
-var polygon = L.polygon([
-    [414, 338], 
-    [359, 385], 
-    [380, 458], 
-    [399, 508], 
-    [498, 437]
-]).addTo(map);
-marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
 //Eventlistener
 map.addEventListener('mousemove', function(ev) {
