@@ -50,4 +50,15 @@ class Session{
     addPolyline(polyline) {
         this.varpolylines.push(polyline);
     }
+
+    getMarkerByType(type){
+        var retList = [];
+        //console.log(this.marker)
+        this.marker.forEach(element => {
+            if(element.varicon == type){
+                retList.push(element);
+            }
+        }); 
+        return retList;
+    }
 }

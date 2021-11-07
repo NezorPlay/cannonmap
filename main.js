@@ -80,16 +80,40 @@ document.getElementById("mapid").addEventListener("click", function (event) {
             }
         case "marker":
             {
-                //console.log("test");
                 let mark = new Marker([lat,lng],map);
-                let name = prompt("Please enter the Name of the Marker", "maker" + Math.random());
-                let icon = prompt("What type of icon (fort/cannon)", "fort");
-                mark.name = name;
-                mark.icon = icon;
-                console.log(lat + "/" + lng);
-                mark.draw();
-                session.addMarker(mark);
-                currentadd = "";
+                let name = "";
+                let icon = "";
+
+                bootbox.prompt({
+                    title: "Please enter the Name of the Marker?",
+                    callback: function (result) {       
+                        name = result;     
+                        mark.name = name;
+                        mark.icon = icon;
+                        console.log(lat + "/" + lng);
+                        mark.draw();
+                        session.addMarker(mark);
+                        currentadd = "";
+                    }
+                });
+
+                bootbox.prompt({
+                    title: "Select the Markertype",
+                    inputType: 'select',
+                    inputOptions: [
+                        {
+                            text: "Fort",
+                            value:"fort"
+                        } ,
+                        {
+                            text: "Cannon",
+                            value:"cannon"
+                        }
+                    ],
+                    callback: function (result) {     
+                        icon = result;       
+                    }
+                });
                 break;
             }
     }
@@ -114,14 +138,6 @@ document.getElementById("marker").addEventListener("click", function() {
     if(currentadd!="") {
         window.alert("finish " + currentadd + " first");
     } else currentadd="marker";
-}); 
-
-//circle button
-document.getElementById("circle").addEventListener("click", function() {
-    //console.log("circle button");
-    if(currentadd!="") {
-        window.alert("finish " + currentadd + " first");
-    } else currentadd="circle";
 }); 
 
 //importFromJSON button
@@ -229,12 +245,50 @@ document.getElementById("saveToJSON").addEventListener("click", function() {
     dlAnchorElem.click();
 }); 
 
-document.getElementById("connectFortCannon").addEventListener("click", function() {
-    let marker1 = prompt("Please the name of the Fort", "");
-    let marker2 = prompt("Please the name of the Cannon", "");
-    let power = prompt("Please the Power", "");
-    connectMarkersWithLine(marker1, marker2, power);
-});
+document.getElementById("connectFortCannonBootbox").addEventListener("click", function() {
+    let marker1 = "";
+    let marker2 = "";
+    let power = "";
+
+    bootbox.prompt({
+        title: "Power?",
+        callback: function (result) {       
+            power = result;     
+            connectMarkersWithLine(marker1, marker2, power);
+        }
+    });
+
+    bootbox.prompt({
+        title: "Select the Fort",
+        inputType: 'select',
+        inputOptions: getMarkerForBootbox("fort"),
+        callback: function (result) {     
+            marker1 = result;       
+        }
+    });
+
+    bootbox.prompt({
+        title: "Select the Cannonposition",
+        inputType: 'select',
+        inputOptions: getMarkerForBootbox("cannon"),
+        callback: function (result) {     
+            marker2 = result;       
+        }
+    });
+
+}); 
+
+function getMarkerForBootbox(type) {
+    var list = [];
+    console.log(session.getMarkerByType(type));
+    session.getMarkerByType(type).forEach(element => {
+        list.push({
+            text: element.name,
+            value: element.name
+        })
+    });
+    return list;
+}
 
 function getMarkerByName(markerName) {
     for(let marker of session.marker){
